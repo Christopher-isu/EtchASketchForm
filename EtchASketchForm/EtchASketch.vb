@@ -1,4 +1,10 @@
-﻿Option Strict On
+﻿'ChristopherZ
+'Spring 2025
+'RCET2265
+'Etch-A-Sketch
+'https://github.com/Christopher-isu/EtchASketchForm.git
+
+Option Strict On
 Option Explicit On
 Imports System.Threading
 
@@ -63,24 +69,33 @@ Public Class EtchASketch
     End Sub
 
     Private Sub DrawWaveforms()
-        Dim g As Graphics = DisplayPictureBox.CreateGraphics()
-        Dim width As Integer = DisplayPictureBox.Width
-        Dim height As Integer = DisplayPictureBox.Height
+        Try
+            ' Ensure safe Graphics object usage within a Using block
+            Using g As Graphics = DisplayPictureBox.CreateGraphics()
+                Dim width As Integer = DisplayPictureBox.Width
+                Dim height As Integer = DisplayPictureBox.Height
 
-        ' Draw graticule
-        g.Clear(Color.White)
-        Dim pen As New Pen(Color.LightGray)
-        For x As Integer = 0 To width Step width \ 10
-            g.DrawLine(pen, x, 0, x, height)
-        Next
-        For y As Integer = 0 To height Step height \ 10
-            g.DrawLine(pen, 0, y, width, y)
-        Next
+                ' Clear the picture box and set background color
+                g.Clear(Color.White)
 
-        ' Draw sine, cosine, and tangent waves
-        DrawWave(g, Color.Red, Function(x) Math.Sin(x))
-        DrawWave(g, Color.Green, Function(x) Math.Cos(x))
-        DrawWave(g, Color.Blue, Function(x) Math.Tan(x) / 10) ' Scale tangent for display
+                ' Draw graticule
+                Dim pen As New Pen(Color.LightGray)
+                For x As Integer = 0 To width Step Math.Max(1, width \ 10) ' Ensure step is valid
+                    g.DrawLine(pen, x, 0, x, height)
+                Next
+                For y As Integer = 0 To height Step Math.Max(1, height \ 10) ' Ensure step is valid
+                    g.DrawLine(pen, 0, y, width, y)
+                Next
+
+                ' Draw sine, cosine, and tangent waves with safeguards
+                DrawWave(g, Color.Red, Function(x) Math.Sin(x))
+                DrawWave(g, Color.Green, Function(x) Math.Cos(x))
+                DrawWave(g, Color.Blue, Function(x) SafeTan(x) / 10) ' Scale tangent for display
+            End Using
+        Catch ex As Exception
+            ' Log or display error message for debugging
+            MessageBox.Show($"An error occurred while drawing waveforms: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
     End Sub
 
     Private Sub DrawWave(g As Graphics, color As Color, waveFunc As Func(Of Double, Double))
@@ -91,13 +106,31 @@ Public Class EtchASketch
 
         Dim oldX As Integer = 0
         Dim oldY As Integer = centerY
+
         For x As Integer = 1 To width
-            Dim y As Integer = centerY - CInt(waveFunc(x * 2 * Math.PI / width) * (height \ 3))
-            g.DrawLine(pen, oldX, oldY, x, y)
-            oldX = x
-            oldY = y
+            Try
+                ' Calculate Y value and ensure it stays within valid bounds
+                Dim y As Integer = centerY - CInt(waveFunc(x * 2 * Math.PI / width) * (height \ 3))
+                y = Math.Min(Math.Max(0, y), height - 1) ' Clamp Y value within the PictureBox
+                g.DrawLine(pen, oldX, oldY, x, y)
+                oldX = x
+                oldY = y
+            Catch ex As OverflowException
+                ' Skip drawing this segment if waveFunc produces invalid results
+                oldX = x
+                oldY = centerY
+            End Try
         Next
     End Sub
+
+    Private Function SafeTan(x As Double) As Double
+        Try
+            ' Safely calculate tangent while avoiding extreme values
+            Return Math.Tan(x)
+        Catch ex As Exception
+            Return 0 ' Return a default value if tangent calculation fails
+        End Try
+    End Function
 
     Private Sub ExitButton_Click(sender As Object, e As EventArgs) Handles ExitButton.Click, ExitMenuItem.Click
         Me.Close()
@@ -123,51 +156,5 @@ Public Class EtchASketch
         End If
     End Sub
 
-    Private Sub EditMenuItem_Click(sender As Object, e As EventArgs) Handles EditMenuItem.Click
 
-    End Sub
-
-    Private Sub FileMenuItem_Click(sender As Object, e As EventArgs) Handles FileMenuItem.Click
-
-    End Sub
-
-    Private Sub HelpMenuItem_Click(sender As Object, e As EventArgs) Handles HelpMenuItem.Click
-
-    End Sub
-
-    Private Sub ExitMenuItem_Click(sender As Object, e As EventArgs) Handles ExitMenuItem.Click
-
-    End Sub
-
-    Private Sub SelectColorMenuItem_Click(sender As Object, e As EventArgs) Handles SelectColorMenuItem.Click
-
-    End Sub
-
-    Private Sub DrawWaveformsMenuItem_Click(sender As Object, e As EventArgs) Handles DrawWaveformsMenuItem.Click
-
-    End Sub
-
-    Private Sub ClearMenuItem_Click(sender As Object, e As EventArgs) Handles ClearMenuItem.Click
-
-    End Sub
-
-    Private Sub AboutMenuItem_Click(sender As Object, e As EventArgs) Handles AboutMenuItem.Click
-
-    End Sub
-
-    Private Sub SelectColorButton_Click_1(sender As Object, e As EventArgs) Handles SelectColorButton.Click
-
-    End Sub
-
-    Private Sub DrawWaveformsButton_Click_1(sender As Object, e As EventArgs) Handles DrawWaveformsButton.Click
-
-    End Sub
-
-    Private Sub ClearButton_Click_1(sender As Object, e As EventArgs) Handles ClearButton.Click
-
-    End Sub
-
-    Private Sub ExitButton_Click_1(sender As Object, e As EventArgs) Handles ExitButton.Click
-
-    End Sub
 End Class
