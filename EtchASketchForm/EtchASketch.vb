@@ -122,4 +122,52 @@ Public Class EtchASketch
             PresentColorDialog()
         End If
     End Sub
+
+    Private Sub EditMenuItem_Click(sender As Object, e As EventArgs) Handles EditMenuItem.Click
+
+    End Sub
+
+    Private Sub FileMenuItem_Click(sender As Object, e As EventArgs) Handles FileMenuItem.Click
+
+    End Sub
+
+    Private Sub HelpMenuItem_Click(sender As Object, e As EventArgs) Handles HelpMenuItem.Click
+
+    End Sub
+
+    Private Sub ExitMenuItem_Click(sender As Object, e As EventArgs) Handles ExitMenuItem.Click
+
+    End Sub
+
+    Private Sub SelectColorMenuItem_Click(sender As Object, e As EventArgs) Handles SelectColorMenuItem.Click
+
+    End Sub
+
+    Private Sub DrawWaveformsMenuItem_Click(sender As Object, e As EventArgs) Handles DrawWaveformsMenuItem.Click
+
+    End Sub
+
+    Private Sub ClearMenuItem_Click(sender As Object, e As EventArgs) Handles ClearMenuItem.Click
+
+    End Sub
+
+    Private Sub AboutMenuItem_Click(sender As Object, e As EventArgs) Handles AboutMenuItem.Click
+
+    End Sub
+
+    Private Sub SelectColorButton_Click_1(sender As Object, e As EventArgs) Handles SelectColorButton.Click
+
+    End Sub
+
+    Private Sub DrawWaveformsButton_Click_1(sender As Object, e As EventArgs) Handles DrawWaveformsButton.Click
+
+    End Sub
+
+    Private Sub ClearButton_Click_1(sender As Object, e As EventArgs) Handles ClearButton.Click
+
+    End Sub
+
+    Private Sub ExitButton_Click_1(sender As Object, e As EventArgs) Handles ExitButton.Click
+
+    End Sub
 End Class
