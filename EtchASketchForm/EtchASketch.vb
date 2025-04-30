@@ -6,15 +6,16 @@
 
 Option Strict On
 Option Explicit On
-Imports System.Threading
+Imports System.Threading 'For Thread.Sleep
 
 Public Class EtchASketch
-    Private DrawColor As Color = Color.Black
-    Private ToolTipProvider As New ToolTip()
+    Private DrawColor As Color = Color.Black 'Default drawing color
+    Private ToolTipProvider As New ToolTip() 'ToolTip provider for all controls
 
     Private Sub EtchASketch_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        InitializeToolTips()
-        SetupAccessibility()
+        ' Using functions for load event to keep code organized
+        InitializeToolTips() ' Initialize tooltips for controls
+        SetupAccessibility() ' Setup accessibility features
     End Sub
 
     Private Sub InitializeToolTips()
@@ -38,34 +39,25 @@ Public Class EtchASketch
         Me.CancelButton = ClearButton
     End Sub
 
-    Private Sub SelectColorButton_Click(sender As Object, e As EventArgs) Handles SelectColorButton.Click, SelectColorMenuItem.Click
-        PresentColorDialog()
-    End Sub
-
     Private Sub PresentColorDialog()
+        ' Present a color dialog to select a drawing color
         Using colorDialog As New ColorDialog()
+            'Preventatively incorporated Using statement for automatic disposal and preventing memory leaks
             If colorDialog.ShowDialog() = DialogResult.OK Then
                 DrawColor = colorDialog.Color
             End If
         End Using
     End Sub
 
-    Private Sub ClearButton_Click(sender As Object, e As EventArgs) Handles ClearButton.Click, ClearMenuItem.Click
-        ShakeAndClear()
-    End Sub
-
     Private Sub ShakeAndClear()
+        ' Clear the drawing area with a shaking effect
         Dim offset As Integer = 10
-        For i As Integer = 0 To 5
-            Me.Left += offset
-            Thread.Sleep(50)
-            Me.Left -= offset
+        For i As Integer = 0 To 5 ' Shake effect
+            Me.Left += offset ' Move right
+            Thread.Sleep(50) ' Pause
+            Me.Left -= offset ' Move left
         Next
-        DisplayPictureBox.Refresh()
-    End Sub
-
-    Private Sub DrawWaveformsButton_Click(sender As Object, e As EventArgs) Handles DrawWaveformsButton.Click, DrawWaveformsMenuItem.Click
-        DrawWaveforms()
+        DisplayPictureBox.Refresh() ' Clear the drawing area
     End Sub
 
     Private Sub DrawWaveforms()
@@ -99,26 +91,27 @@ Public Class EtchASketch
     End Sub
 
     Private Sub DrawWave(g As Graphics, color As Color, waveFunc As Func(Of Double, Double))
+        ' Draw three waveforms (sine, cosine, tangent) on the PictureBox
         Dim pen As New Pen(color)
-        Dim width As Integer = DisplayPictureBox.Width
-        Dim height As Integer = DisplayPictureBox.Height
-        Dim centerY As Integer = height \ 2
+        Dim width As Integer = DisplayPictureBox.Width ' Get the width of the PictureBox
+        Dim height As Integer = DisplayPictureBox.Height ' Get the height of the PictureBox
+        Dim centerY As Integer = height \ 2 ' Center Y position for waveforms
 
-        Dim oldX As Integer = 0
-        Dim oldY As Integer = centerY
+        Dim oldX As Integer = 0 ' Start at the left edge
+        Dim oldY As Integer = centerY ' Center Y position
 
         For x As Integer = 1 To width
             Try
                 ' Calculate Y value and ensure it stays within valid bounds
                 Dim y As Integer = centerY - CInt(waveFunc(x * 2 * Math.PI / width) * (height \ 3))
                 y = Math.Min(Math.Max(0, y), height - 1) ' Clamp Y value within the PictureBox
-                g.DrawLine(pen, oldX, oldY, x, y)
-                oldX = x
-                oldY = y
+                g.DrawLine(pen, oldX, oldY, x, y) ' Draw line segment
+                oldX = x ' Update oldX to current x
+                oldY = y ' Update oldY to current y
             Catch ex As OverflowException
                 ' Skip drawing this segment if waveFunc produces invalid results
-                oldX = x
-                oldY = centerY
+                oldX = x ' Update oldX to current x
+                oldY = centerY ' Reset oldY to centerY
             End Try
         Next
     End Sub
@@ -132,22 +125,28 @@ Public Class EtchASketch
         End Try
     End Function
 
+    Private Sub DisplayPictureBox_MouseMove(sender As Object, e As MouseEventArgs) Handles DisplayPictureBox.MouseMove
+        ' Draw on the PictureBox when the mouse is moved with the left button pressed
+        Static oldX As Integer = -1 ' Initialize X to -1 to indicate no previous position
+        Static oldY As Integer = -1 ' Initialize Y  to -1 to indicate no previous position
+
+        If e.Button = MouseButtons.Left AndAlso oldX >= 0 AndAlso oldY >= 0 Then
+            ' Draw a line from the last position to the current position
+            Dim g As Graphics = DisplayPictureBox.CreateGraphics() ' Create a Graphics object
+            Dim pen As New Pen(DrawColor, 2) ' Set the pen color and width
+            g.DrawLine(pen, oldX, oldY, e.X, e.Y) ' Draw line segment
+            g.Dispose() ' Dispose of the Graphics object
+        End If
+        oldX = e.X ' Update oldX to current X
+        oldY = e.Y ' Update oldY to current Y
+    End Sub
+
     Private Sub ExitButton_Click(sender As Object, e As EventArgs) Handles ExitButton.Click, ExitMenuItem.Click
         Me.Close()
     End Sub
 
-    Private Sub DisplayPictureBox_MouseMove(sender As Object, e As MouseEventArgs) Handles DisplayPictureBox.MouseMove
-        Static oldX As Integer = -1
-        Static oldY As Integer = -1
-
-        If e.Button = MouseButtons.Left AndAlso oldX >= 0 AndAlso oldY >= 0 Then
-            Dim g As Graphics = DisplayPictureBox.CreateGraphics()
-            Dim pen As New Pen(DrawColor, 2)
-            g.DrawLine(pen, oldX, oldY, e.X, e.Y)
-            g.Dispose()
-        End If
-        oldX = e.X
-        oldY = e.Y
+    Private Sub DrawWaveformsButton_Click(sender As Object, e As EventArgs) Handles DrawWaveformsButton.Click, DrawWaveformsMenuItem.Click
+        DrawWaveforms()
     End Sub
 
     Private Sub DisplayPictureBox_MouseDown(sender As Object, e As MouseEventArgs) Handles DisplayPictureBox.MouseDown
@@ -156,5 +155,18 @@ Public Class EtchASketch
         End If
     End Sub
 
+    Private Sub ClearButton_Click(sender As Object, e As EventArgs) Handles ClearButton.Click, ClearMenuItem.Click
+        ShakeAndClear()
+    End Sub
+
+    Private Sub SelectColorButton_Click(sender As Object, e As EventArgs) Handles SelectColorButton.Click, SelectColorMenuItem.Click
+        PresentColorDialog()
+    End Sub
+
+    Private Sub AboutMenuItem_Click(sender As Object, e As EventArgs) Handles AboutMenuItem.Click
+        ' Show the AboutForm when the menu item is clicked
+        Dim about As New AboutForm()
+        about.ShowDialog() ' Show as a modal dialog
+    End Sub
 
 End Class

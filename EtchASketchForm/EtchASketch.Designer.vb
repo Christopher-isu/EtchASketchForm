@@ -47,9 +47,9 @@ Partial Class EtchASketch
         Me.DisplayPictureBox.BackColor = System.Drawing.Color.White
         Me.DisplayPictureBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.DisplayPictureBox.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.DisplayPictureBox.Location = New System.Drawing.Point(0, 30)
+        Me.DisplayPictureBox.Location = New System.Drawing.Point(0, 28)
         Me.DisplayPictureBox.Name = "DisplayPictureBox"
-        Me.DisplayPictureBox.Size = New System.Drawing.Size(800, 420)
+        Me.DisplayPictureBox.Size = New System.Drawing.Size(800, 422)
         Me.DisplayPictureBox.TabIndex = 0
         Me.DisplayPictureBox.TabStop = False
         '
@@ -107,7 +107,7 @@ Partial Class EtchASketch
         Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileMenuItem, Me.EditMenuItem, Me.HelpMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Size = New System.Drawing.Size(800, 30)
+        Me.MenuStrip1.Size = New System.Drawing.Size(800, 28)
         Me.MenuStrip1.TabIndex = 2
         Me.MenuStrip1.Text = "MenuStrip1"
         '
@@ -115,45 +115,45 @@ Partial Class EtchASketch
         '
         Me.FileMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ExitMenuItem})
         Me.FileMenuItem.Name = "FileMenuItem"
-        Me.FileMenuItem.Size = New System.Drawing.Size(46, 26)
+        Me.FileMenuItem.Size = New System.Drawing.Size(46, 24)
         Me.FileMenuItem.Text = "&File"
         '
         'ExitMenuItem
         '
         Me.ExitMenuItem.Name = "ExitMenuItem"
-        Me.ExitMenuItem.Size = New System.Drawing.Size(224, 26)
+        Me.ExitMenuItem.Size = New System.Drawing.Size(116, 26)
         Me.ExitMenuItem.Text = "E&xit"
         '
         'EditMenuItem
         '
         Me.EditMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SelectColorMenuItem, Me.DrawWaveformsMenuItem, Me.ClearMenuItem})
         Me.EditMenuItem.Name = "EditMenuItem"
-        Me.EditMenuItem.Size = New System.Drawing.Size(49, 26)
+        Me.EditMenuItem.Size = New System.Drawing.Size(49, 24)
         Me.EditMenuItem.Text = "&Edit"
         '
         'SelectColorMenuItem
         '
         Me.SelectColorMenuItem.Name = "SelectColorMenuItem"
-        Me.SelectColorMenuItem.Size = New System.Drawing.Size(224, 26)
+        Me.SelectColorMenuItem.Size = New System.Drawing.Size(205, 26)
         Me.SelectColorMenuItem.Text = "Set &Color"
         '
         'DrawWaveformsMenuItem
         '
         Me.DrawWaveformsMenuItem.Name = "DrawWaveformsMenuItem"
-        Me.DrawWaveformsMenuItem.Size = New System.Drawing.Size(224, 26)
+        Me.DrawWaveformsMenuItem.Size = New System.Drawing.Size(205, 26)
         Me.DrawWaveformsMenuItem.Text = "Draw &Waveforms"
         '
         'ClearMenuItem
         '
         Me.ClearMenuItem.Name = "ClearMenuItem"
-        Me.ClearMenuItem.Size = New System.Drawing.Size(224, 26)
+        Me.ClearMenuItem.Size = New System.Drawing.Size(205, 26)
         Me.ClearMenuItem.Text = "&Clear"
         '
         'HelpMenuItem
         '
         Me.HelpMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AboutMenuItem})
         Me.HelpMenuItem.Name = "HelpMenuItem"
-        Me.HelpMenuItem.Size = New System.Drawing.Size(55, 26)
+        Me.HelpMenuItem.Size = New System.Drawing.Size(55, 24)
         Me.HelpMenuItem.Text = "&Help"
         '
         'AboutMenuItem
